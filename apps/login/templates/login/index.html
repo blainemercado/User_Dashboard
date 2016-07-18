@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Login and Registration</title>
+</head>
+<body>
+	<h1>Registration for New Users</h1>
+	<form action="{%url 'login_register' %}" method="post">
+		{% csrf_token %}
+		<label>First Name:</label>
+		<input type="text" name="first" placeholder="min. 2 chars.">
+		<label>Last Name:</label>
+		<input type="text" name="last" placeholder="min. 2 chars.">
+		<label>Email:</label>
+		<input type="text" name="email" placeholder="example@email.com">
+		<label>Password:</label>
+		<input type="password" name="pass" placeholder="min. 8 chars.">
+		<label>Password Confirmation:</label>
+		<input type="password" name="confirm" placeholder="min. 8 chars.">
+		<input type="submit" name="register" value="Register">
+		{% if messages %}
+			{% for message in messages %}
+				{% if message.tags == 'info' %}
+					{{message}}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</form>
+	<h1>Login</h1>
+	<form action="{%url 'login_login' %}" method="post">
+		{% csrf_token %}
+		<label>Email:</label>
+		<input type="text" name="email">
+		<label>Password:</label>
+		<input type="password" name="pass1">
+		<input type="submit" name="login" value="Login">
+		{% if messages %}
+			{% for message in messages %}
+				{% if message.tags == 'warning' %} 
+					{{message}}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</form>
+</body>
+</html>
