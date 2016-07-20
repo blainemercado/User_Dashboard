@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>New User</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/login.css' %}">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{%url 'dashboard_index' %}">Groups</h3>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+          		<ul class="nav navbar-nav">
+				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
+				 	<li class="active"><a href="{%url 'dashboard_admin_dash' %}">User Dashboard</a></li>
+			 	</ul>
+			 	<ul class="nav navbar-nav navbar-right">
+			 		<li class="active"><a id="currentUser" href="{%url 'dashboard_show' id=request.session.userID %}">Hi, {{request.session.currentUser}}!<span class="sr-only">(current)</span></a></li>
+            		<li class="active"><a href="{%url 'dashboard_logout' %}">Logout<span class="sr-only">(current)</span></a></li>
+         		 </ul>
+     		</div>
+		</div>
+	</nav>
+	<div class="container">
+		<h2 id="page_head" class="form-signin-heading">Add a new user</h2>
+		<a id="return_dash" class="btn btn-lg btn-primary btn-block" href="{%url 'dashboard_admin_dash' %}">Return to Dashboard</a>
+		<form action="/users/new/add" method="post" class="form-signin">
+			{% csrf_token %}
+			<input name="first" type="text" id="inputEmail" class="form-control" placeholder="First Name" required autofocus>
+			<input name="last" type="text" id="inputEmail" class="form-control" placeholder="Last Name" required autofocus>
+			<input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+			<input name="pass1" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+			<input name="confirm" type="password" id="inputPassword" class="form-control" placeholder="Password confirmation" required>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+		</form>
+    </div>
+</body>
+</html>

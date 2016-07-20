@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Profile</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/login.css' %}">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			{% for user in users %}
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{%url 'dashboard_index' %}">Groups</h3>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+          		<ul class="nav navbar-nav">
+				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
+				 	{% if request.session.userLevel == 9 %}
+				 		<li class="active"><a href="{%url 'dashboard_admin_dash' %}">User Dashboard</a></li>
+				 	{% endif %}
+				 	{% if request.session.userLevel == 1 %}
+				 		<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
+				 	{% endif %}
+			 	</ul>
+			 	<ul class="nav navbar-nav navbar-right">
+            		<li class="active"><a id="currentUser" href="{%url 'dashboard_show' id=request.session.userID %}">Hi, {{request.session.currentUser}}!<span class="sr-only">(current)</span></a></li>
+            		<li class="active"><a href="{%url 'dashboard_logout' %}">Logout<span class="sr-only">(current)</span></a></li>
+         		 </ul>
+     		</div>
+		</div>
+	</nav>
+	<div id='user_info' class="jumbotron">
+        <div id="nameHeader">
+	        <h3 id="user_name">{{user.first_name}} {{user.last_name}}</h3>
+	        {% if request.session.userID == user.id %}
+	        	<a id="edit" class="btn btn-lg btn-primary btn-block" href="{%url 'dashboard_edit' %}">Edit Profile</a>
+	    	{% endif %}
+    	</div>
+        <div id="left">
+        	<p class="lead">Registered on:</p>
+        	<p class="lead">User ID:</p>
+        	<p class="lead">Email address:</p>
+        	<p class="lead">Description:</p>
+        </div>
+        <div id="right">
+        	<p class="lead">{{user.created_at}}</p>
+        	<p class="lead">{{user.id}}</p>
+        	<p class="lead">{{user.email}}</p>
+        	<p class="lead">{{user.description}}</p>
+        </div>
+        {% endfor %}
+	</div>
+	<div class="row">
+		<div id="log" class="col-sm-6">
+			<div class="panel panel-success">
+	            <div class="panel-heading">
+	              	<h3 class="panel-title">Panel title</h3>
+	            </div>
+	            <div class="panel-body">
+	              	Panel content
+	            </div>
+			</div>
+			<div id="reply" class="panel panel-warning">
+	            <div class="panel-heading">
+	              	<h3 class="panel-title">Panel title</h3>
+	            </div>
+	            <div class="panel-body">
+	              	Panel content
+	            </div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

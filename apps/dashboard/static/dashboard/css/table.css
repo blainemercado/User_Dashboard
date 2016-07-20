@@ -1,0 +1,38 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+#table_name {
+	display: inline-block;
+}
+#add_new {
+	width: 100px;
+	display: inline-block;
+	margin-left: 296px;
+}
+#action_th {
+  padding: 8px 35px;
+}
+#edit {
+  display: inline-block;
+}
+#remove {
+  display: inline-block;
+}
+#currentUser {
+  color: blue;
+}

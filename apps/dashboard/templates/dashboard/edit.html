@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Edit Profile</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/login.css' %}">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{%url 'dashboard_index' %}">Groups</h3>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+          		<ul class="nav navbar-nav">
+				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
+				 	<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
+			 	</ul>
+			 	<ul class="nav navbar-nav navbar-right">
+            		<li class="active"><a id="currentUser" href="{%url 'dashboard_show' id=request.session.userID %}">Hi, {{request.session.currentUser}}!<span class="sr-only">(current)</span></a></li>
+            		<li class="active"><a href="{%url 'dashboard_logout' %}">Logout<span class="sr-only">(current)</span></a></li>
+         		 </ul>
+     		</div>
+		</div>
+	</nav>
+	<h2 id="page_head" class="form-signin-heading">Edit Profile</h2>
+	<a id="return_dash" class="btn btn-lg btn-primary btn-block" href="{%url 'dashboard_dash' %}">Return to Dashboard</a>
+	{% for user in user %}
+	<div class="container">
+		<h3 id="page_head" class="form-signin-heading">Edit Information</h3>
+		<form action="/users/updateInfo/{{user.id}}" method="post" class="form-signin">
+		{% csrf_token %}
+			First Name:
+			<input name="first" type="text" id="inputEmail" class="form-control" value="{{user.first_name}}" required autofocus>
+			Last Name:
+			<input name="last" type="text" id="inputEmail" class="form-control" value="{{user.last_name}}" required autofocus>
+			Email Address:
+			<input name="email" type="email" id="inputEmail" class="form-control" value="{{user.email}}" required autofocus>
+			<input type="hidden" name="level" value="{{user.user_level}}">
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+		</form>
+    </div>
+    <div class="container">
+		<h3 id="page_head" class="form-signin-heading">Change Password</h3>
+		<form action="/users/updatePassword/{{user.id}}" method="post" class="form-signin">
+			{% csrf_token %}
+			<input name="pass1" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+			<input name="pass2" type="password" id="inputPassword" class="form-control" placeholder="Password confirmation" required>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Update Password</button>
+		</form>
+    </div>
+    <div class="container">
+		<h3 id="page_head" class="form-signin-heading">Edit Description</h3>
+		<form action="/users/updateDescription/{{user.id}}" method="post" class="form-signin">
+			{% csrf_token %}
+			<textarea name="description" class="form-control">{{user.description}}</textarea>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+		</form>
+    </div>
+    {% endfor %}
+</body>
+</html>

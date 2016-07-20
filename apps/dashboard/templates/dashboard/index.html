@@ -3,29 +3,57 @@
 <head>
 	<meta charset="utf-8">
 	<title>Home Page</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/table.css' %}">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="banner">
-		<h3>ThickerThan</h3>
-		<a href="****NEED URL****">Home</a>
-		<a href="****NEED URL****">Login</a>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{%url 'dashboard_index' %}">Groups</h3>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+          		<ul class="nav navbar-nav">
+				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
+				 	{% if request.session.userLevel == 1 %}
+				 		<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
+				 	{% endif %}
+				 	{% if request.session.userLevel == 9 %}
+				 		<li class="active"><a href="{%url 'dashboard_admin_dash' %}">User Dashboard</a></li>
+				 	{% endif %}
+			 	</ul>
+			 	<ul class="nav navbar-nav navbar-right">
+            		<li class="active"><a href="{%url 'dashboard_login' %}">Login<span class="sr-only">(current)</span></a></li>
+         		 </ul>
+     		</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Welcome to Groups</h1>
+			<p>We're going to build a cool application using a MVC framework!</p>
+			<p>
+				<a class="btn btn-lg btn-primary" href="{%url 'dashboard_login' %}" role="button">Start</a>
+			</p>
+		</div>
 	</div>
-	<div>
-		<h1>Welcome to ThickerThan</h1>
-		<p>We're going to build a cool application using a MVC framework!</p>
-		<a href="****NEED URL****">Start</a>
-	</div>
-	<div class="">
-		<h2>Manage Users</h2>
-		<p>Using this application, you'll learn how to add, remove and edit users for the application</p>
-	</div>
-	<div>
-		<h2>Leave Messages</h2>
-		<p>Users will be able to leave a message to another user using this application</p>
-	</div>
-	<div>
-		<h2>Edit User Information</h2>
-		<p>Admins will be able to edit another user's information (email address, first name, last name, etc)</p>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Manage Users</h2>
+				<p>Using this application, you'll learn how to add, remove and edit users for the application</p>
+			</div>
+			<div class="col-md-4">
+				<h2>Leave Messages</h2>
+				<p>Users will be able to leave a message to another user using this application</p>
+			</div>
+			<div class="col-md-4">
+				<h2>Edit User Information</h2>
+				<p>Admins will be able to edit another user's information (email address, first name, last name, etc)</p>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

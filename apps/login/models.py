@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+import bcrypt
 import re
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9\.\+_-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
@@ -11,15 +11,17 @@ class UserLoginManager(models.Manager):
 	def verifyLogin(self, email, password):
 		print "made it here!!!!"
 		if len(User.objects.filter(email=email)) == 0:
-			print "Made it here too!!!!!"
+			print "Email does not match any email in database"
 			return False
 		else:
-			print "Hoping to make it here though!!!"
+			print "Email does exist, grabbing user info from email to use password for validation"
 			userInfo = User.objects.filter(email=email)
-		print userInfo
-		if userInfo[0].password == password:
+		print userInfo[0].password
+		if bcrypt.hashpw(password.encode(encoding="utf-8", errors="strict"), userInfo[0].password.encode(encoding="utf-8", errors="strict")) == userInfo[0].password.encode(encoding="utf-8", errors="strict"):
+			print "validated"
 			return True
 		else:
+			print "no match"
 			return False
 
 class UserManager(models.Manager):
@@ -84,13 +86,12 @@ class User(models.Model):
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
 	email = models.CharField(max_length=200)
-	#birthday = birthday.fields.BirthdayField()
 	password = models.CharField(max_length=200)
-	confirmation = models.CharField(max_length=200)
+	user_level = models.IntegerField(default=1)
+	description = models.TextField(max_length=1000, default="Welcome to the Group! You can edit your personal description by clicking on the 'Edit Profile' button")
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	userManager = UserManager()
 	validateUserManager = ValidateUserManager()
 	userLoginManager = UserLoginManager()
 	objects = models.Manager()
-	#objects = birthday.managers.BirthdayManager()
