@@ -18,5 +18,7 @@ urlpatterns = [
 	url(r'^users/updatePassword/(?P<id>\d+)$', views.updatePassword, name = 'dashboard_updatePassword'),
 	url(r'^users/updateDescription/(?P<id>\d+)$', views.updateDescription, name = 'dashboard_updateDescription'),
 	url(r'^users/show/(?P<id>\d+)$', views.show, name = 'dashboard_show'),
-	url(r'^remove/(?P<id>\d+)$', views.remove, name = 'dashboard_remove')
+	url(r'^remove/(?P<id>\d+)$', views.remove, name = 'dashboard_remove'),
+	url(r'^users/(?P<id>\d+)/post$', views.post, name = 'dashboard_post'),
+	url(r'^users/(?P<id>\d+)/comment$', views.comment, name = 'dashboard_comment')
 ]

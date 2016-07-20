@@ -17,7 +17,12 @@
 			<div id="navbar" class="navbar-collapse collapse">
           		<ul class="nav navbar-nav">
 				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
-				 	<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
+				 	{% if request.session.userLevel == 9 %}
+				 		<li class="active"><a href="{%url 'dashboard_admin_dash' %}">User Dashboard</a></li>
+				 	{% endif %}
+				 	{% if request.session.userLevel == 1 %}
+				 		<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
+				 	{% endif %}
 			 	</ul>
 			 	<ul class="nav navbar-nav navbar-right">
             		<li class="active"><a id="currentUser" href="{%url 'dashboard_show' id=request.session.userID %}">Hi, {{request.session.currentUser}}!<span class="sr-only">(current)</span></a></li>
@@ -27,7 +32,12 @@
 		</div>
 	</nav>
 	<h2 id="page_head" class="form-signin-heading">Edit Profile</h2>
-	<a id="return_dash" class="btn btn-lg btn-primary btn-block" href="{%url 'dashboard_dash' %}">Return to Dashboard</a>
+	{% if request.session.userLevel == 9 %}
+		<a id="return_dash" class="btn btn-lg btn-primary btn-block" href="{%url 'dashboard_admin_dash' %}">Return to Dashboard</a>
+	{% endif %}
+	{% if request.session.userLevel == 1 %}
+		<a id="return_dash" class="btn btn-lg btn-primary btn-block" href="{%url 'dashboard_dash' %}">Return to Dashboard</a>
+	{% endif %}
 	{% for user in user %}
 	<div class="container">
 		<h3 id="page_head" class="form-signin-heading">Edit Information</h3>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from .models import User
+from .models import User, Post, Comment
 import bcrypt
 
 # Create your views here.
@@ -19,15 +19,12 @@ def logout(request):
 
 def login_validation(request):
 	if User.userLoginManager.verifyLogin(request.POST['email'], request.POST['pass1']) == True:
-		print request.POST['email']
 		curUserInfo = User.objects.filter(email = request.POST['email'])
 		request.session['userLevel'] = curUserInfo[0].user_level
 		request.session['currentUser'] = curUserInfo[0].first_name
 		request.session['userID'] = curUserInfo[0].id
-		print request.session['currentUser']
 		return redirect(reverse('dashboard_admin_dash'))
 	else:
-		print "in the views page, password did not match"
 		messages.warning(request, 'Email and Password do not match')
 		return redirect(reverse('dashboard_login'))
 
@@ -50,9 +47,13 @@ def registration(request):
 		my_user = User.objects.create(first_name=first, last_name=last, email=email, password=hashed)
 		print my_user
 		print my_user.password
+		print User.objects.all()
+		if len(User.objects.all()) == 1:
+			my_user.user_level = 9
+			my_user.save()
 		request.session['currentUser'] = first
 		request.session['userID'] = my_user.id
-		request.session['userInfo'] = my_user.user_level
+		request.session['userLevel'] = my_user.user_level
 	else:
 		if stuff[1] == "name1":
 			messages.info(request, 'Name must be at least 2 chars.')
@@ -176,10 +177,20 @@ def updateDescription(request, id):
 
 def show(request, id):
 	context = {
-		"users": User.objects.filter(id=id)
+		"users": User.objects.filter(id=id),
+		"posts": Post.objects.filter(post_host=id),
+		"comments": Comment.objects.filter()
 	}
 	return render(request, 'dashboard/show.html', context)
 
+def post(request, id):
+	Post.objects.create(post=request.POST['post'], post_creator=User.objects.get(id=request.POST['post_creator']), post_host=User.objects.get(id=id))
+	return redirect('/users/show/'+id)
+
+def comment(request, id):
+	Comment.objects.create(comment=request.POST['comment'], comment_creator=User.objects.get(id=request.POST['comment_creator']), post=Post.objects.get(id=id))
+	userID = request.POST['userID']
+	return redirect('/users/show/'+userID)
 
 
 

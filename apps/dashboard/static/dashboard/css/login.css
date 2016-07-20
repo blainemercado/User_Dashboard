@@ -51,6 +51,7 @@ body {
 }
 #user_info {
   margin-left: 20px;
+
 }
 #left {
   display: inline-block;
@@ -58,6 +59,8 @@ body {
 #right {
   display: inline-block;
   margin-left: 15px;
+  width: 400px;
+  vertical-align: top;
 }
 #log {
   margin-left: 25px;
@@ -78,3 +81,36 @@ body {
   padding: 1px 16px 10px 12px;
   margin-bottom: 10px;
 }
+#postRow {
+  margin: 20px 0px;
+}
+  #postHeading {
+    margin: 20px 0px 0px 25px;
+  }
+  #post {
+    margin: 20px 0px 10px 25px;
+  }
+  #postBtn {
+    width: 70px;
+    height: 40px;
+    margin-left: 362px;
+    padding-top: 6px;
+  }
+  #comments {
+    text-align: right;
+     margin-bottom: 15px;
+  }
+  #comment {
+    margin-top: 0px;
+    display: inline;
+  }
+  #commentBtn {
+    width: 170px;
+    height: 30px;
+    padding: 1px 16px 10px 12px;
+    display: inline-block;
+  }
+
+
+
+

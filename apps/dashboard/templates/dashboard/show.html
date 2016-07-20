@@ -9,9 +9,9 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
+	{% for user in users %}
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
-			{% for user in users %}
 			<div class="navbar-header">
 				<a class="navbar-brand" href="{%url 'dashboard_index' %}">Groups</h3>
 			</div>
@@ -51,27 +51,54 @@
         	<p class="lead">{{user.email}}</p>
         	<p class="lead">{{user.description}}</p>
         </div>
-        {% endfor %}
 	</div>
+	<div  id="postRow" class="row">
+		<h3 id="postHeading">Post a message</h3>
+		<form action="/users/{{user.id}}/post" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="post_creator" value="{{request.session.userID}}">
+			<textarea id="post" name="post" rows="4" cols="60"></textarea>
+			<button id="postBtn" class="btn btn-lg btn-primary btn-block" type="submit">Post</button>
+		</form>
+	</div>
+
 	<div class="row">
 		<div id="log" class="col-sm-6">
+			{% for post in posts %}
 			<div class="panel panel-success">
 	            <div class="panel-heading">
-	              	<h3 class="panel-title">Panel title</h3>
+	              	<h3 class="panel-title">{{post.post_creator.first_name}}</h3>
 	            </div>
 	            <div class="panel-body">
-	              	Panel content
+	              	{{post.post}}
 	            </div>
 			</div>
-			<div id="reply" class="panel panel-warning">
-	            <div class="panel-heading">
-	              	<h3 class="panel-title">Panel title</h3>
-	            </div>
-	            <div class="panel-body">
-	              	Panel content
-	            </div>
-			</div>
+			{% for comment in comments %}
+				{% if comment.post.id == post.id %}
+					<div id="reply" class="panel panel-warning">
+			            <div class="panel-heading">
+			              	<h3 class="panel-title">{{comment.comment_creator.first_name}}</h3>
+			            </div>
+			            <div class="panel-body">
+			              	{{comment.comment}}
+			            </div>
+					</div>
+				{% endif %}
+			{% endfor %}
+			<form id="comments" action="/users/{{post.id}}/comment" method="post">
+			{% csrf_token %}
+				<input type="hidden" name="userID" value="{{user.id}}">
+				<input type="hidden" name="comment_creator" value="{{request.session.userID}}">
+				<div id="block">
+					<textarea id="comment" name="comment" rows="3" cols="50"></textarea>
+				</div>
+				<div id="block">
+					<button id="commentBtn" class="btn btn-lg btn-primary btn-block" type="submit">Leave a comment</button>
+				</div>
+			</form>
+			{% endfor %}
 		</div>
 	</div>
+	{% endfor %}
 </body>
 </html>
