@@ -25,17 +25,24 @@
 				 	{% endif %}
 			 	</ul>
 			 	<ul class="nav navbar-nav navbar-right">
-            		<li class="active"><a href="{%url 'dashboard_login' %}">Login<span class="sr-only">(current)</span></a></li>
+			 	{% if request.session.userLevel %}
+			 		<li class="active"><a id="currentUser" href="{%url 'dashboard_show' id=request.session.userID %}">Hi, {{request.session.currentUser}}!<span class="sr-only">(current)</span></a></li>
+			 	{% endif %}
+        		{% if request.session.userLevel %}
+        			<li class="active"><a href="{%url 'dashboard_logout' %}">Logout<span class="sr-only">(current)</span></a></li>
+    			{% else %}
+    				<li class="active"><a href="{%url 'dashboard_login' %}">Login<span class="sr-only">(current)</span></a></li>
+    			{% endif %}
          		 </ul>
      		</div>
 		</div>
 	</nav>
 	<div class="container">
 		<div class="jumbotron">
-			<h1>Welcome to Groups</h1>
-			<p>We're going to build a cool application using a MVC framework!</p>
+			<h1>Welcome to Groups!</h1>
+			<p>Where EVERYONE can find a Group. If you're not in the Group yet, what are you waiting for?</p>
 			<p>
-				<a class="btn btn-lg btn-success" href="{%url 'dashboard_login' %}" role="button">Start</a>
+				<a class="btn btn-lg btn-success" href="{%url 'dashboard_register' %}" role="button">Get in the Group!</a>
 			</p>
 		</div>
 	</div>
@@ -43,15 +50,15 @@
 		<div class="row">
 			<div class="col-md-4">
 				<h2>Manage Users</h2>
-				<p>Using this application, you'll learn how to add, remove and edit users for the application</p>
+				<p>Learn how to add, edit and remove users from a Group as an admin, plus declare additional admins.</p>
 			</div>
 			<div class="col-md-4">
 				<h2>Leave Messages</h2>
-				<p>Users will be able to leave a message to another user using this application</p>
+				<p>Group members will be able to post messages to other member's profiles, and everyone in the Group can comment</p>
 			</div>
 			<div class="col-md-4">
-				<h2>Edit User Information</h2>
-				<p>Admins will be able to edit another user's information (email address, first name, last name, etc)</p>
+				<h2>Group Activity</h2>
+				<p>Check out some other Groups recent activity and see the latest from your Groups. If you're not in the Group yet, what are you waiting for?</p>
 			</div>
 		</div>
 	</div>

@@ -23,7 +23,10 @@ def login_validation(request):
 		request.session['userLevel'] = curUserInfo[0].user_level
 		request.session['currentUser'] = curUserInfo[0].first_name
 		request.session['userID'] = curUserInfo[0].id
-		return redirect(reverse('dashboard_admin_dash'))
+		if request.session['userLevel'] == 9:
+			return redirect(reverse('dashboard_admin_dash'))
+		else:
+			return redirect(reverse('dashboard_dash'))
 	else:
 		messages.warning(request, 'Email and Password do not match')
 		return redirect(reverse('dashboard_login'))
@@ -41,32 +44,20 @@ def registration(request):
 	stuff = User.validateUserManager.validate(first, last, email, pass1, pass2)
 	print stuff
 	if stuff == True:
-		pass1 = pass1.encode(encoding="utf-8", errors="strict")
-		hashed = bcrypt.hashpw(pass1, bcrypt.gensalt())
-		print hashed
-		my_user = User.objects.create(first_name=first, last_name=last, email=email, password=hashed)
-		print my_user
-		print my_user.password
-		print User.objects.all()
-		if len(User.objects.all()) == 1:
-			my_user.user_level = 9
-			my_user.save()
+		my_user = User.objects.get(email=email)
 		request.session['currentUser'] = first
 		request.session['userID'] = my_user.id
 		request.session['userLevel'] = my_user.user_level
 	else:
-		if stuff[1] == "name1":
-			messages.info(request, 'Name must be at least 2 chars.')
-		elif stuff[1] == "name2":
-			messages.info(request, 'Name must be at least 2 chars.')
-		elif stuff[1] == "email":
+		if stuff[1] == "email":
 			messages.info(request, 'Please enter a valid email')
-		elif stuff[1] == "pass1":
-			messages.info(request, 'Password needs 8 chars. min')
-		elif stuff[1] == "pass2":
-			messages.info(request, 'Confirmation password did not match')
+		if stuff[1] == "emailExists":
+			messages.info(request, 'That email already exists. Did you forget your password?')
 		return redirect('/register')
 	return redirect('/dash')
+
+def new(request):
+	return render(request, 'dashboard/new.html')
 
 def add(request):
 	first = request.POST['first']
@@ -78,24 +69,13 @@ def add(request):
 	stuff = User.validateUserManager.validate(first, last, email, pass1, pass2)
 	print stuff
 	if stuff == True:
-		pass1 = pass1.encode(encoding="utf-8", errors="strict")
-		hashed = bcrypt.hashpw(pass1, bcrypt.gensalt())
-		print hashed
-		my_user = User.objects.create(first_name=first, last_name=last, email=email, password=hashed)
-		print my_user
-		print my_user.password
+		print "added user"
 	else:
-		if stuff[1] == "name1":
-			messages.info(request, 'Name must be at least 2 chars.')
-		elif stuff[1] == "name2":
-			messages.info(request, 'Name must be at least 2 chars.')
-		elif stuff[1] == "email":
+		if stuff[1] == "email":
 			messages.info(request, 'Please enter a valid email')
-		elif stuff[1] == "pass1":
-			messages.info(request, 'Password needs 8 chars. min')
-		elif stuff[1] == "pass2":
-			messages.info(request, 'Confirmation password did not match')
-		return redirect('/register')
+		if stuff[1] == "emailExists":
+			messages.warning(request, 'That email already exists')
+		return redirect('/users/new')
 	return redirect('/admin_dash')
 
 def admin_dash(request):
@@ -116,9 +96,6 @@ def dash(request):
 	}
 	return render(request, 'dashboard/dash.html', context)
 
-def new(request):
-	return render(request, 'dashboard/new.html')
-
 def edit_user(request, id):
 	context = {
 		"user": User.objects.filter(id=id)
@@ -132,23 +109,26 @@ def edit(request):
 	return render(request, 'dashboard/edit.html', context)
 
 def updateInfo(request, id):
-	print "made it to update and here's the user ID:", id
-	print request.session['userID']
 	first = request.POST['first']
 	last = request.POST['last']
 	email = request.POST['email']
-	newUser = User.objects.get(id=id)
-	newUser.user_level = request.POST['level']
-	if User.userManager.validName(first, last) == True:
-		newUser.first_name = first
-		newUser.last_name = last
+	user_level = int(request.POST['level'])
+
+	edit_user = User.objects.get(id=id)
+	edit_user_level = edit_user.user_level
+	edit_user_email = edit_user.email
+	if edit_user_email == email:
+		if User.updateRemoveManager.updateInfoNoE(id, first, last, user_level) == True:
+			pass
+		else:
+			return redirect('/users/edit/'+id)
 	else:
-		return redirect('/users/edit/'+id) 
-	if User.userManager.validEmail(email) == True:
-		newUser.email = email
-	else:
-		return redirect('/users/edit/'+id)
-	newUser.save()
+	 	if User.updateRemoveManager.updateInfo(id, first, last, email, user_level) == True:
+	 		pass
+		else:
+			return redirect('/users/edit/'+id)
+	if edit_user_level != user_level:
+		request.session['userLevel'] = user_level
 	if str(request.session['userID']) == id:
 		return redirect('/users/show/'+id)
 	else:
@@ -156,14 +136,9 @@ def updateInfo(request, id):
 	
 def updatePassword(request, id):
 	newUser = User.objects.get(id=id)
-	pass1 = request.POST['pass1']
-	if len(pass1) > 7 and pass1 == request.POST['pass2']:
-		pass1 = pass1.encode(encoding="utf-8", errors="strict")
-		print newUser.password
-		newUser.password  = bcrypt.hashpw(pass1, bcrypt.gensalt())
-		newUser.save()
-		print newUser.password
-	else:
+	password = request.POST['pass1']
+	confirmation = request.POST['pass2']
+	if User.updateRemoveManager.updatePassword(id, password, confirmation) == False:
 		return redirect('/users/edit/'+id)
 	if str(request.session['userID']) == id:
 		return redirect('/users/show/'+id)

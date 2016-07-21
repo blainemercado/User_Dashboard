@@ -36,6 +36,7 @@ class UserManager(models.Manager):
 			print last_name, "last not long enough"
 			return (False, "name2")
 		else:
+			print "both first and last names came back true"
 			return True
 	def validEmail(self, email):
 		if len(email) < 1:
@@ -44,6 +45,9 @@ class UserManager(models.Manager):
 		elif not re.match(EMAIL_REGEX, email):
 			print "Not a valid email"
 			return (False, "email")
+		elif len(User.objects.filter(email=email)) > 0:
+			print "email already exists"
+			return (False, "emailExists")
 		print "The EmailManager validate function is working", email
 		return True
 	def confirmPass(self, password, confirmation):
@@ -77,10 +81,57 @@ class ValidateUserManager(models.Manager):
 			return emailResults 
 		if passResults==True:
 			print "all 3 equal True"
+			pass1 = password.encode(encoding="utf-8", errors="strict")
+			hashed = bcrypt.hashpw(pass1, bcrypt.gensalt())
+			print hashed
+			my_user = User.objects.create(first_name=first_name, last_name=last_name, email=email, password=hashed)
+			if len(User.objects.all()) == 1:
+				my_user.user_level = 9
+				my_user.save()
 			return True
 		else:
 			print passResults
 			return passResults
+
+class UpdateRemoveManager(models.Manager):
+	def updateInfo(self, id, first_name, last_name, email, user_level):
+		editUser = User.objects.get(id=id)
+		editUser.user_level = user_level
+		if User.userManager.validName(first_name, last_name) == True:
+			editUser.first_name = first_name
+			editUser.last_name = last_name
+		else:
+			return False
+		if User.userManager.validEmail(email) == True:
+			editUser.email = email
+		else:
+			return False
+		editUser.save()
+		return True
+
+	def updateInfoNoE(self, id, first_name, last_name, user_level):
+		editUser = User.objects.get(id=id)
+		editUser.user_level = user_level
+		if User.userManager.validName(first_name, last_name) == True:
+			editUser.first_name = first_name
+			editUser.last_name = last_name
+			editUser.save()
+			return True
+		else:
+			return False
+	
+	def updatePassword(self, id, password, confirmation):
+		editUser = User.objects.get(id=id)
+		if User.userManager.confirmPass(password, confirmation) == True:
+			pass1 = password.encode(encoding="utf-8", errors="strict")
+			editUser.password  = bcrypt.hashpw(pass1, bcrypt.gensalt())
+			editUser.save()
+			return True
+		else:
+			return False
+
+	def remove(self, id):
+		pass
 
 # Create your models here.
 class User(models.Model):
@@ -95,4 +146,5 @@ class User(models.Model):
 	userManager = UserManager()
 	validateUserManager = ValidateUserManager()
 	userLoginManager = UserLoginManager()
+	updateRemoveManager = UpdateRemoveManager()
 	objects = models.Manager()

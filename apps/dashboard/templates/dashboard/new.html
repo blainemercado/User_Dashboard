@@ -29,7 +29,17 @@
 	<div class="container">
 		<h2 id="page_head" class="form-signin-heading">Add a new user</h2>
 		<form action="/users/new/add" method="post" class="form-signin">
-			{% csrf_token %}
+		{% if messages %}
+				{% for message in messages %}
+					{% if message.tags == 'info' %}
+						{{message}}
+					{% endif %}
+					{% if message.tags == 'warning' %}
+						{{message}}
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		{% csrf_token %}
 			<input name="first" type="text" id="inputEmail" class="form-control" placeholder="First Name" required autofocus>
 			<input name="last" type="text" id="inputEmail" class="form-control" placeholder="Last Name" required autofocus>
 			<input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>

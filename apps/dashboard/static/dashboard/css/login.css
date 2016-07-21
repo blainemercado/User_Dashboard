@@ -47,7 +47,7 @@ body {
 }
 .register-user {
   margin: 0 auto;
-  text-align: center;
+  padding-left: 15px;
 }
 #return_div {
   text-align: right;
