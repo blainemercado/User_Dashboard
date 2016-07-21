@@ -6,10 +6,7 @@ import bcrypt
 
 # Create your views here.
 def index(request):
-	context = {
-		"users": User.objects.filter(id=request.session['userID'])
-	}
-	return render(request, 'dashboard/index.html', context)
+	return render(request, 'dashboard/index.html')
 
 def login(request):
 	return render(request, 'dashboard/login.html')

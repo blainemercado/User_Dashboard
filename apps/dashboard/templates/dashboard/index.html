@@ -17,14 +17,6 @@
 			<div id="navbar" class="navbar-collapse collapse">
           		<ul class="nav navbar-nav">
 				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
-				 	{% for user in users %}
-					 	{% if user.user_level == 1 %}
-					 		<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
-					 	{% endif %}
-					 	{% if user.user_level == 9 %}
-					 		<li class="active"><a href="{%url 'dashboard_admin_dash' %}">User Dashboard</a></li>
-					 	{% endif %}
-				 	{% endfor %}
 			 	</ul>
 			 	<ul class="nav navbar-nav navbar-right">
 			 	{% if request.session.userLevel %}
