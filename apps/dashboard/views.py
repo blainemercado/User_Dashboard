@@ -49,10 +49,18 @@ def registration(request):
 		request.session['userID'] = my_user.id
 		request.session['userLevel'] = my_user.user_level
 	else:
-		if stuff[1] == "email":
+		if stuff[1] == "name1":
+			messages.info(request, 'Name must be at least 2 chars.')
+		elif stuff[1] == "name2":
+			messages.info(request, 'Name must be at least 2 chars.')
+		elif stuff[1] == "email":
 			messages.info(request, 'Please enter a valid email')
-		if stuff[1] == "emailExists":
+		elif stuff[1] == "emailExists":
 			messages.info(request, 'That email already exists. Did you forget your password?')
+		elif stuff[1] == "pass1":
+			messages.info(request, 'Password needs 8 chars. min')
+		elif stuff[1] == "pass2":
+			messages.info(request, 'Confirmation password did not match')
 		return redirect('/register')
 	return redirect('/dash')
 
@@ -71,16 +79,24 @@ def add(request):
 	if stuff == True:
 		print "added user"
 	else:
-		if stuff[1] == "email":
+		if stuff[1] == "name1":
+			messages.info(request, 'Name must be at least 2 chars.')
+		elif stuff[1] == "name2":
+			messages.info(request, 'Name must be at least 2 chars.')
+		elif stuff[1] == "email":
 			messages.info(request, 'Please enter a valid email')
-		if stuff[1] == "emailExists":
+		elif stuff[1] == "emailExists":
 			messages.warning(request, 'That email already exists')
+		elif stuff[1] == "pass1":
+			messages.info(request, 'Password needs 8 chars. min')
+		elif stuff[1] == "pass2":
+			messages.info(request, 'Confirmation password did not match')
 		return redirect('/users/new')
 	return redirect('/admin_dash')
 
 def admin_dash(request):
 	context = {
-		"users": User.objects.all()
+		"users": User.objects.all().order_by('id')
 	}
 	print context
 	return render(request, 'dashboard/admin_dash.html', context)
@@ -92,7 +108,7 @@ def remove(request, id):
 
 def dash(request):
 	context = {
-		"users": User.objects.all()
+		"users": User.objects.all().order_by('id')
 	}
 	return render(request, 'dashboard/dash.html', context)
 
