@@ -19,6 +19,9 @@ body {
 #table_name {
 	display: inline-block;
 }
+  .table_user {
+    color: #189e4a;
+  }
 #add_new {
 	width: 100px;
 	display: inline-block;
@@ -34,5 +37,5 @@ body {
   display: inline-block;
 }
 #currentUser {
-  color: blue;
+  color: #189e4a;
 }

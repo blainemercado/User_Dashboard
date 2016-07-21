@@ -28,8 +28,7 @@
 	</nav>
 	{% for user in user %}
 	<h2 id="page_head" class="form-signin-heading">Edit user #{{user.id}}</h2>
-	<a id="return_dash" class="btn btn-lg btn-primary btn-block" href="{%url 'dashboard_admin_dash' %}">Return to Dashboard</a>
-	<div class="container">
+	<div class="edit_box">
 		<h3 id="page_head" class="form-signin-heading">Edit Information</h3>
 		<form action="/users/updateInfo/{{user.id}}" method="post" class="form-signin">
 			{% csrf_token %}
@@ -41,17 +40,17 @@
 			<input name="email" type="email" id="inputEmail" class="form-control" value="{{user.email}}" required autofocus>
 			User_Level (1 or 9):
 			<input name="level" type="text" id="inputEmail" class="form-control" value="{{user.user_level}}" required autofocus>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+			<button class="btn btn-lg btn-success btn-block" type="submit">Save</button>
 		</form>
     </div>
-    <div class="container">
-		<h3 id="page_head" class="form-signin-heading">Change Password</h3>
+    <div class="edit_box">
+		<h3 id="edit_password" class="form-signin-heading">Change Password</h3>
 		<form action="/users/updatePassword/{{user.id}}" method="post" class="form-signin">
 			{% csrf_token %}
 			<label for="inputPassword" class="sr-only">Password</label>
 			<input name="pass1" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
 			<input name="pass2" type="password" id="inputPassword" class="form-control" placeholder="Password confirmation" required>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Update Password</button>
+			<button class="btn btn-lg btn-success btn-block" type="submit">Update Password</button>
 		</form>
     </div>
     {% endfor %}
