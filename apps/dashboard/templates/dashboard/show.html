@@ -18,10 +18,10 @@
 			<div id="navbar" class="navbar-collapse collapse">
           		<ul class="nav navbar-nav">
 				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
-				 	{% if request.session.userLevel == 9 %}
+				 	{% if user.user_level == 9 %}
 				 		<li class="active"><a href="{%url 'dashboard_admin_dash' %}">User Dashboard</a></li>
 				 	{% endif %}
-				 	{% if request.session.userLevel == 1 %}
+				 	{% if user.user_level == 1 %}
 				 		<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
 				 	{% endif %}
 			 	</ul>

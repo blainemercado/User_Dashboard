@@ -6,7 +6,10 @@ import bcrypt
 
 # Create your views here.
 def index(request):
-	return render(request, 'dashboard/index.html')
+	context = {
+		"users": User.objects.filter(id=request.session['userID'])
+	}
+	return render(request, 'dashboard/index.html', context)
 
 def login(request):
 	return render(request, 'dashboard/login.html')
@@ -127,8 +130,6 @@ def updateInfo(request, id):
 	 		pass
 		else:
 			return redirect('/users/edit/'+id)
-	if edit_user_level != user_level:
-		request.session['userLevel'] = user_level
 	if str(request.session['userID']) == id:
 		return redirect('/users/show/'+id)
 	else:

@@ -9,6 +9,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
+	{% for user in user %}
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -17,10 +18,10 @@
 			<div id="navbar" class="navbar-collapse collapse">
           		<ul class="nav navbar-nav">
 				 	<li class="active"><a href="{%url 'dashboard_index' %}">Home</a></li>
-				 	{% if request.session.userLevel == 9 %}
+				 	{% if user.user_level == 9 %}
 				 		<li class="active"><a href="{%url 'dashboard_admin_dash' %}">User Dashboard</a></li>
 				 	{% endif %}
-				 	{% if request.session.userLevel == 1 %}
+				 	{% if user.user_level == 1 %}
 				 		<li class="active"><a href="{%url 'dashboard_dash' %}">User Dashboard</a></li>
 				 	{% endif %}
 			 	</ul>
@@ -32,7 +33,6 @@
 		</div>
 	</nav>
 	<h2 class="form-signin-heading">Edit Profile</h2>
-	{% for user in user %}
 	<div class="edit_box">
 		<h3 id="page_head" class="form-signin-heading">Edit Information</h3>
 		<form action="/users/updateInfo/{{user.id}}" method="post" class="form-signin">

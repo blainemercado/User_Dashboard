@@ -32,9 +32,14 @@ body {
 }
 #edit {
   display: inline-block;
+  color: #189e4a;
 }
 #remove {
   display: inline-block;
+  background-color: #fbab18;
+  color: white;
+  border-radius: 7px;
+  margin-left: 5px;
 }
 #currentUser {
   color: #189e4a;
